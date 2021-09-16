@@ -287,6 +287,15 @@ this value."
   :type 'integer
   :group 'sr-speedbar)
 
+(defcustom sr-speedbar-unsplittable nil
+  "Make `sr-speedbar' window unsplittable.
+Default is nil.  If t also prevents, for example, the splitting
+of `sr-speedbar' following the execution of other commands (like `compile')."
+  :type 'boolean
+  :set (lambda (symbol value)
+         (set symbol value))
+  :group 'sr-speedbar)
+
 (defcustom sr-speedbar-auto-refresh t
   "Automatically refresh speedbar content when changed directory.
 Default is t."
@@ -431,7 +440,8 @@ of a speedbar-window.  It will be created if necessary."
           (sr-speedbar-handle-auto-refresh sr-speedbar-auto-refresh))
         (set-window-buffer sr-speedbar-window (get-buffer sr-speedbar-buffer-name))
         (set-window-dedicated-p sr-speedbar-window t) ;make `sr-speedbar-window' dedicated to speedbar-buffer.
-        (select-window current-window))
+        (select-window current-window)
+        (when sr-speedbar-unsplittable (setq split-height-threshold nil))) ;; make `sr-speedbar-window' unsplittable
     (message "`sr-speedbar' window has exist.")))
 
 (defun sr-speedbar-close ()
